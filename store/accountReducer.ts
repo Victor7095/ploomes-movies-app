@@ -1,5 +1,7 @@
 // action - state management
+import persistReducer from "redux-persist/es/persistReducer";
 import { LOGIN, LOGOUT, REGISTER, UPDATE_PROFILE } from "./actions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // ==============================|| ACCOUNT REDUCER ||============================== //
 
@@ -24,6 +26,7 @@ const accountReducer = (state = initialState, action: Action) => {
       };
     }
     case LOGIN: {
+      console.log("LOGIN")
       const { user } = action.payload;
       return {
         ...state,
@@ -53,4 +56,11 @@ const accountReducer = (state = initialState, action: Action) => {
   }
 };
 
-export default accountReducer;
+const persistConfig = {
+  key: "account",
+  storage: AsyncStorage,
+};
+
+const persistedReducer = persistReducer(persistConfig, accountReducer);
+
+export default persistedReducer;

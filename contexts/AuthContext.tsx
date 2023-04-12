@@ -11,12 +11,20 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { collection, addDoc, DocumentReference, DocumentData, getDoc, doc, DocumentSnapshot } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  DocumentReference,
+  DocumentData,
+  getDoc,
+  doc,
+  DocumentSnapshot,
+} from "firebase/firestore";
 
 // action - state management
 import { LOGIN, LOGOUT } from "../store/actions";
-import accountReducer from "../store/accountReducer";
-import { auth, db } from "../firebaseConfig";
+import { useSelector, useDispatch } from "react-redux";
+import { auth, db } from "../config/firebaseConfig";
 
 // initialState
 const initialState = {
@@ -37,11 +45,18 @@ type FirebaseContextType = {
     authData: UserCredential;
     userDocument: any;
   }>;
-  firebaseRegister: (username: string, email: string, password: string) => Promise<{
+  firebaseRegister: (
+    username: string,
+    email: string,
+    password: string
+  ) => Promise<{
     authData: UserCredential;
     userDocument: DocumentReference<DocumentData>;
   }>;
-  login: (email: string, password: string) => Promise<{
+  login: (
+    email: string,
+    password: string
+  ) => Promise<{
     authData: UserCredential;
     userDocument: any;
   }>;
@@ -65,6 +80,7 @@ function useProtectedRoute(user: any) {
     }
 
     const inAuthGroup = segments.length === 0 || segments[0] === "register";
+    console.log(segments);
 
     if (
       // If the user is not signed in and the initial segment is not anything in the auth group.
@@ -81,12 +97,14 @@ function useProtectedRoute(user: any) {
 }
 
 export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(accountReducer, initialState);
+  const state = useSelector((state: any) => state);
+  const dispatch = useDispatch();
 
   useEffect(
     () =>
-      onAuthStateChanged(auth, (user) => {
-        console.log(user)
+      onAuthStateChanged(auth, (firebaseUser) => {
+        console.log("onAuthStateChanged", firebaseUser);
+        const user = firebaseUser;
         if (user) {
           dispatch({
             type: LOGIN,
@@ -110,17 +128,28 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
 
   useProtectedRoute(state.user);
 
-  const firebaseEmailPasswordSignIn = async (email: string, password: string) =>{
+  const firebaseEmailPasswordSignIn = async (
+    email: string,
+    password: string
+  ) => {
     const authData = await signInWithEmailAndPassword(auth, email, password);
     const userDocument = {};
     return {
       authData,
       userDocument,
     };
-  }
+  };
 
-  const firebaseRegister = async (username: string, email: string, password: string) => {
-    const authData = await createUserWithEmailAndPassword(auth, email, password);
+  const firebaseRegister = async (
+    username: string,
+    email: string,
+    password: string
+  ) => {
+    const authData = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const userDocument = await addDoc(collection(db, "users"), {
       username,
       email,

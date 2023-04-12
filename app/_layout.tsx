@@ -1,18 +1,21 @@
 // App layout
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { Slot } from "expo-router";
 import { Provider } from "react-redux";
 import { FirebaseProvider as AuthProvider } from "../contexts/AuthContext";
-import { store } from '../store';
+import { store, persister } from "../store";
+import { PersistGate } from "redux-persist/integration/react";
 
 export default function App() {
   return (
     <Provider store={store}>
-      <AuthProvider>
-        <View style={styles.container}>
-          <Slot />
-        </View>
-      </AuthProvider>
+      <PersistGate loading={<ActivityIndicator/>} persistor={persister}>
+        <AuthProvider>
+          <View style={styles.container}>
+            <Slot />
+          </View>
+        </AuthProvider>
+      </PersistGate>
     </Provider>
   );
 }

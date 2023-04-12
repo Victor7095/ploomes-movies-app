@@ -1,28 +1,46 @@
 import { useState, useEffect } from "react";
+import { StyleSheet, View } from "react-native";
+import {Picker} from '@react-native-picker/picker';
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, ScrollView } from "react-native";
+
 import { Text, TextInput } from "../../components";
+import SearchMovieList from "../../components/SearchMovieList";
+import { API_KEY, API_URL } from "../../config/api";
 
 export default function Home() {
-  const [nowPlaying, setNowPlaying] = useState<Movie[]>([]);
+  const [search, setSearch] = useState<string>("");
+  const [genre, setGenre] = useState<string>("");
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [genres, setGenres] = useState<Genre[]>([]);
+
+  useEffect
 
   useEffect(() => {
+    if (!search) {
+      return;
+    }
     fetch(
-      "https://api.themoviedb.org/3/movie/now_playing?api_key=958f4c13ca4c26bf3dfe94aeccc9b4a0"
+      `${API_URL}/search/movie?api_key=${API_KEY}&query=${search}`
     )
       .then((response) => response.json())
       .then((json) => {
-        setNowPlaying(json.results);
+        setMovies(json.results);
       })
       .catch((error) => console.error(error));
-  }, []);
+  }, [search]);
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.title}>Search</Text>
-      <TextInput placeholder="Search" />
+      <TextInput
+        placeholder="Search"
+        value={search}
+        onChangeText={setSearch}
+        returnKeyType="search"
+      />
+      <SearchMovieList movieList={movies} />
       <StatusBar style="auto" />
-    </ScrollView>
+    </View>
   );
 }
 

@@ -36,11 +36,6 @@ export default function Login() {
         const {authData, userDocument} = response;
         console.log(authData, userDocument)
       })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(error, errorCode, errorMessage);
-      });
   };
 
   return (

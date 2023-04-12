@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, ScrollView } from "react-native";
 import { MovieList, Text } from "../../components";
+import { API_KEY, API_URL } from "../../config/api";
 
 export default function Home() {
   const [nowPlaying, setNowPlaying] = useState<Movie[]>([]);
@@ -9,7 +10,7 @@ export default function Home() {
 
   useEffect(() => {
     fetch(
-      "https://api.themoviedb.org/3/movie/now_playing?api_key=958f4c13ca4c26bf3dfe94aeccc9b4a0"
+      `${API_URL}/movie/now_playing?api_key=${API_KEY}`
     )
       .then((response) => response.json())
       .then((json) => {
@@ -18,7 +19,7 @@ export default function Home() {
       .catch((error) => console.error(error));
       
     fetch(
-      "https://api.themoviedb.org/3/movie/popular?api_key=958f4c13ca4c26bf3dfe94aeccc9b4a0"
+      `${API_URL}/movie/popular?api_key=${API_KEY}`
     )
       .then((response) => response.json())
       .then((json) => {
