@@ -5,7 +5,7 @@ import { Button, Text } from "../../components";
 import useAuth from "../../hooks/useAuth";
 
 export default function Settings() {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
   }, []);
@@ -14,6 +14,7 @@ export default function Settings() {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Settings</Text>
       <StatusBar style="auto" />
+      <Text style={styles.line}>Logged in as {user?.username}</Text>
       <Button onPress={logout}>
         <Text>Logout</Text>
       </Button>
@@ -30,6 +31,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 10,
+    marginBottom: 20,
+  },
+  line: {
+    fontSize: 14,
     marginBottom: 20,
   },
 });

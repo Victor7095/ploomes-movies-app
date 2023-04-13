@@ -106,17 +106,18 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
         console.log("onAuthStateChanged", firebaseUser);
         const user = firebaseUser;
         if (user) {
-          dispatch({
-            type: LOGIN,
-            payload: {
-              isLoggedIn: true,
-              user: {
-                id: user.uid,
-                email: user.email,
-                name: user.displayName || "John Doe",
-              },
-            },
-          });
+          getDoc(doc(db, "users", user.uid)).then(
+            (doc) => {
+              const userData = doc.data();
+              dispatch({
+                type: LOGIN,
+                payload: {
+                  isLoggedIn: true,
+                  user: { ...user, ...userData },
+                },
+              });
+            }
+          );
         } else {
           dispatch({
             type: LOGOUT,
@@ -133,10 +134,8 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
     password: string
   ) => {
     const authData = await signInWithEmailAndPassword(auth, email, password);
-    const userDocument = {};
     return {
       authData,
-      userDocument,
     };
   };
 
@@ -150,7 +149,7 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
       email,
       password
     );
-    const userDocument =  await setDoc(doc(db, "users", authData.user.uid), {
+    const userDocument = await setDoc(doc(db, "users", authData.user.uid), {
       username,
       email,
       favorites: [],
