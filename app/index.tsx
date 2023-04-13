@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Image, Pressable, StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { Link, useRouter } from "expo-router";
+import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -13,7 +13,6 @@ export default function Login() {
   const [password, setPassword] = useState("12345678");
 
   const { firebaseEmailPasswordSignIn } = useAuth();
-  const router = useRouter();
 
   const validate = () => {
     if (email === "") {
@@ -30,12 +29,19 @@ export default function Login() {
   const submit = () => {
     if (!validate()) return;
     console.log("login");
-    firebaseEmailPasswordSignIn(email, password)
-      .then((response) => {
-        // Signed in
-        const {authData, userDocument} = response;
-        console.log(authData, userDocument)
-      })
+    firebaseEmailPasswordSignIn(email, password).then((response) => {
+      // Signed in
+      const { authData, userDocument } = response;
+      console.log(authData, userDocument);
+    }).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(error, errorCode, errorMessage);
+
+      if (errorCode === "auth/user-not-found") {
+        alert("User not found");
+      }
+    });
   };
 
   return (
@@ -49,14 +55,14 @@ export default function Login() {
         style={styles.gradient}
         locations={[0.2, 0.8]}
       />
-      <Ionicons
-        name="videocam-outline"
-        style={styles.logo}
-        size={256}
-        color="yellowgreen"
-      />
-      <Text style={styles.title}>Buscador de filmes</Text>
       <View style={styles.form}>
+        <Ionicons
+          name="videocam-outline"
+          style={styles.logo}
+          size={256}
+          color="yellowgreen"
+        />
+        <Text style={styles.title}>Ploomes Movie DB</Text>
         <TextInput
           placeholder="Username"
           value={email}
@@ -90,17 +96,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    paddingTop: 90,
+    paddingTop: "10%",
+    alignSelf: "center",
   },
   title: {
     fontSize: 32,
     fontWeight: "bold",
-    marginBottom: 60,
+    marginBottom: 40,
+    textAlign: "center",
   },
   backgroundImage: {
     flex: 1,
     resizeMode: "cover", // or 'stretch'
     position: "absolute",
+    height: "100%",
   },
   gradient: {
     flex: 1,

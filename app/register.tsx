@@ -49,6 +49,18 @@ export default function Register() {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(error, errorCode, errorMessage);
+
+        if (errorCode === "auth/email-already-in-use") {
+          alert("Email already in use");
+        }
+
+        if (errorCode === "auth/invalid-email") {
+          alert("Invalid email");
+        }
+
+        if (errorCode === "auth/weak-password") {
+          alert("Password is too weak");
+        }
       });
   };
 
@@ -112,6 +124,7 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover", // or 'stretch'
     position: "absolute",
+    height: "100%",
   },
   gradient: {
     flex: 1,
