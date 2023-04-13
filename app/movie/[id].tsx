@@ -4,7 +4,7 @@ import { Image, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-import { Button, MovieDetails, Text } from "../../components";
+import { MovieDetails, Text } from "../../components";
 import { useRouter, useSearchParams, useNavigation } from "expo-router";
 import { API_KEY, API_URL } from "../../config/api";
 

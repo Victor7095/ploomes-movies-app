@@ -38,6 +38,17 @@ export default function App() {
         }}
       />
       <Tabs.Screen
+        name="favorites"
+        options={{
+          href: "/home/favorites",
+          title: "Favorites",
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="star-outline" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="settings"
         options={{
           href: "/home/settings",

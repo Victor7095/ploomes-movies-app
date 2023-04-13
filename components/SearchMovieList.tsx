@@ -12,7 +12,14 @@ const SearchMovieList = ({ movieList, genres }: SearchMovieListProps) => {
       data={movieList}
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => {
-        const movieGenres = genres.filter((genre) => item.genre_ids.includes(genre.id));
+        let movieGenres: Genre[] = [];
+        if (item.genre_ids) {
+          movieGenres = genres.filter((genre) =>
+            item.genre_ids.includes(genre.id)
+          );
+        } else if (item.genres) {
+          movieGenres = item.genres;
+        }
         return <SearchMovieItem movie={item} genres={movieGenres} />;
       }}
     ></FlatList>
