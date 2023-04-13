@@ -1,6 +1,17 @@
 import { Image, StyleSheet, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Text } from ".";
+import { auth, db } from "../config/firebaseConfig";
+import {
+  collection,
+  doc,
+  addDoc,
+  getDoc,
+  arrayRemove,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 type MovieDetailsProps = {
   movie: Movie;
@@ -8,6 +19,46 @@ type MovieDetailsProps = {
 };
 
 const MovieDetails = ({ movie, genres }: MovieDetailsProps) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    async function loadFavorite() {
+      // get user favorites
+      const user = auth.currentUser;
+      if (!user) return;
+      const userDocRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userDocRef);
+      const userData = userDoc.data();
+      setIsFavorite(userData?.favorites.includes(movie.id));
+    }
+    loadFavorite();
+  }, []);
+
+  const toogleFavorite = async () => {
+    // Add/remove movie id to/from user favorites at user.favorites
+    const user = auth.currentUser;
+    if (!user) return;
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+    if (!userDoc.exists()) {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+      return;
+    }
+    const userData = userDoc.data();
+    if (userData?.favorites.includes(movie.id)) {
+      await updateDoc(userDocRef, {
+        favorites: arrayRemove(movie.id),
+      });
+      setIsFavorite(false);
+    } else {
+      await updateDoc(userDocRef, {
+        favorites: arrayUnion(movie.id),
+      });
+      setIsFavorite(true);
+    }
+  };
+
   return (
     <>
       <View style={styles.movie}>
@@ -22,7 +73,12 @@ const MovieDetails = ({ movie, genres }: MovieDetailsProps) => {
           <Text style={styles.movieYear}>{movie.release_date}</Text>
           <Text>{genres.map((genre) => genre.name).join(", ")}</Text>
           <View style={styles.actions}>
-            <Ionicons name="heart-outline" size={24} color="white" />
+            <Ionicons
+              name={isFavorite ? "heart" : "heart-outline"}
+              size={24}
+              color="white"
+              onPress={toogleFavorite}
+            />
             <Ionicons name="share-outline" size={24} color="white" />
           </View>
         </View>

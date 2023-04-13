@@ -32,8 +32,6 @@ const styles = StyleSheet.create({
   movie: {
     flexDirection: "row",
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
   },
   movieImage: {
     width: 100,

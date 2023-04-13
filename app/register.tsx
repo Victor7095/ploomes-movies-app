@@ -42,8 +42,8 @@ export default function Register() {
     firebaseRegister(username, email, password)
       .then((response) => {
         // Signed in
-        const {authData, userDocument} = response;
-        console.log(authData, userDocument)
+        const { authData, userDocument } = response;
+        console.log(authData, userDocument);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -63,9 +63,8 @@ export default function Register() {
         style={styles.gradient}
         locations={[0.2, 0.8]}
       />
-
-      <Text style={styles.title}>Register</Text>
       <View style={styles.form}>
+        <Text style={styles.title}>Register</Text>
         <TextInput
           placeholder="Username"
           value={username}

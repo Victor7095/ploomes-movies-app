@@ -13,7 +13,7 @@ import {
 } from "firebase/auth";
 import {
   collection,
-  addDoc,
+  setDoc,
   DocumentReference,
   DocumentData,
   getDoc,
@@ -150,9 +150,10 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
       email,
       password
     );
-    const userDocument = await addDoc(collection(db, "users"), {
+    const userDocument =  await setDoc(doc(db, "users", authData.user.uid), {
       username,
       email,
+      favorites: [],
     });
     return {
       authData,
