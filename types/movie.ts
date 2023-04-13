@@ -4,6 +4,7 @@ type Movie = {
   backdrop_path: string;
   poster_path: string;
   genre_ids: number[];
+  genres?: Genre[];
   original_language: string;
   original_title: string;
   overview: string;

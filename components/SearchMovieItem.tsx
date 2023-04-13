@@ -37,8 +37,6 @@ const MovieItem = ({ movie, genres }: MovieItemProps) => {
 const styles = StyleSheet.create({
   movie: {
     flexDirection: "row",
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
     marginBottom: 16,
   },
   movieImage: {
