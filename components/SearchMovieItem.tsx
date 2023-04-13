@@ -8,10 +8,11 @@ import {
 import { Text } from ".";
 
 type MovieItemProps = {
-  movie: Movie
+  movie: Movie,
+  genres: Genre[],
 };
 
-const MovieItem = ({ movie }: MovieItemProps) => {
+const MovieItem = ({ movie, genres }: MovieItemProps) => {
   return (
     <Link href={`/movie/${movie.id}`} asChild>
       <Pressable>
@@ -24,6 +25,7 @@ const MovieItem = ({ movie }: MovieItemProps) => {
             <View style={styles.movieInfo}>
               <Text style={styles.movieTitle}>{movie.title}</Text>
               <Text style={styles.movieYear}>{movie.release_date}</Text>
+              <Text>{genres.map((genre) => genre.name).join(", ")}</Text>
             </View>
           </View>
         )}
