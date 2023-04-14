@@ -1,6 +1,11 @@
 # Ploomes Movies App
 This is a simple Expo app that allows you to search for movies and add them to your favorites list.
 
+## Screens
+| Login | Register | Home | Search | Favorites | Movie Details |
+| --- | --- | --- | --- | --- | --- |
+| ![alt text](./docs/imgs/login.png) | ![alt text](./docs/imgs/register.png) | ![alt text](./docs/imgs/home.png) | ![alt text](./docs/imgs/search.png) | ![alt text](./docs/imgs/favorites.png) | ![alt text](./docs/imgs/movie-details.png) |
+
 ## Environment
 - Npm 8.3.0
 - Node.js 18.15.0
