@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet } from "react-native";
-import { SearchMovieItem } from ".";
+import SearchMovieItem from "./SearchMovieItem";
 
 type SearchMovieListProps = {
   movieList: Movie[];

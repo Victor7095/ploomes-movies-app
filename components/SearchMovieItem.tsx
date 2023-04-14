@@ -5,7 +5,7 @@ import {
   StyleSheet,
   View
 } from "react-native";
-import { Text } from ".";
+import Text from "./Text";
 
 type MovieItemProps = {
   movie: Movie,

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { ActivityIndicator, StyleSheet, ScrollView, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 
 import { SearchMovieList, Text } from "../../components";
 import { API_KEY, API_URL } from "../../config/api";
@@ -52,7 +52,7 @@ export default function Favorites() {
   );
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.title}>Favorites</Text>
       <StatusBar style="auto" />
       {isLoading ? (
@@ -62,7 +62,7 @@ export default function Favorites() {
       ) : (
         <SearchMovieList movieList={movies} genres={genres} />
       )}
-    </ScrollView>
+    </View>
   );
 }
 

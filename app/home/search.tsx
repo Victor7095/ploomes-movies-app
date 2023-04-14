@@ -4,24 +4,23 @@ import { StatusBar } from "expo-status-bar";
 
 import { Picker, Text, TextInput, SearchMovieList } from "../../components";
 import { API_KEY, API_URL } from "../../config/api";
+import DropDownPicker from "react-native-dropdown-picker";
 
 export default function Home() {
   const [search, setSearch] = useState<string>("");
-  const [genre, setGenre] = useState<number>(0);
+  const [genre, setGenre] = useState<number|null>(null);
   const [movies, setMovies] = useState<Movie[]>([]);
   const [genres, setGenres] = useState<Genre[]>([]);
 
   const filteredMovies = useMemo(() => {
-    if (genre === 0) {
+    if (genre === null) {
       return movies;
     }
     return movies.filter((movie) => movie.genre_ids.includes(genre));
   }, [movies, genre]);
 
   useEffect(() => {
-    fetch(
-      `${API_URL}/genre/movie/list?api_key=${API_KEY}`
-    )
+    fetch(`${API_URL}/genre/movie/list?api_key=${API_KEY}`)
       .then((response) => response.json())
       .then((json) => {
         setGenres(json.genres);
@@ -33,9 +32,7 @@ export default function Home() {
     if (!search) {
       return;
     }
-    fetch(
-      `${API_URL}/search/movie?api_key=${API_KEY}&query=${search}`
-    )
+    fetch(`${API_URL}/search/movie?api_key=${API_KEY}&query=${search}`)
       .then((response) => response.json())
       .then((json) => {
         setMovies(json.results);
@@ -52,16 +49,16 @@ export default function Home() {
         onChangeText={setSearch}
         returnKeyType="search"
       />
-        <Picker
-          selectedValue={genre}
-          onValueChange={(itemValue) => setGenre(Number(itemValue))}
-          placeholder="Filter by genre"
-        >
-          <Picker.Item label="Filter by genre" value={0} enabled={false} />
-          {genres.map((genre) => (
-            <Picker.Item key={genre.id} label={genre.name} value={genre.id} />
-          ))}
-        </Picker>
+      <Picker
+        value={genre}
+        items={genres}
+        setValue={setGenre}
+        placeholder="Select a genre"
+        schema={{
+          value: "id",
+          label: "name",
+        }}
+      />
       <SearchMovieList movieList={filteredMovies} genres={genres} />
       <StatusBar style="auto" />
     </View>

@@ -1,6 +1,6 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Alert, Image, Share, StyleSheet, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Text } from ".";
+import Text from "./Text";
 import { auth, db } from "../config/firebaseConfig";
 import {
   collection,
@@ -59,6 +59,27 @@ const MovieDetails = ({ movie, genres }: MovieDetailsProps) => {
     }
   };
 
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: movie.title,
+        url: `exp://u.expo.dev/b3343605-c57e-4304-ab16-1c52e079b39e?channel-name=main&runtime-version=exposdk%3A48.0.0&movie-id=${movie.id}`,
+        title: "Watch this movie!",
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
+
   return (
     <>
       <View style={styles.movie}>
@@ -79,7 +100,12 @@ const MovieDetails = ({ movie, genres }: MovieDetailsProps) => {
               color="white"
               onPress={toogleFavorite}
             />
-            <Ionicons name="share-outline" size={24} color="white" />
+            <Ionicons
+              name="share-outline"
+              size={24}
+              color="white"
+              onPress={onShare}
+            />
           </View>
         </View>
       </View>
